@@ -1,0 +1,204 @@
+<!doctype html>
+<html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>AIWorkspace Virtual Office</title>
+<style>
+:root{
+  font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+  color:#e8edf6;background:#0a0f18;--panel:#111927;--panel2:#151f30;--line:#2a3850;
+  --muted:#8ea0ba;--text:#e8edf6;--work:#55d68b;--wait:#6da8ff;--problem:#ff6b76;--idle:#8794a8;--accent:#9f86ff;
+}
+*{box-sizing:border-box}html,body{margin:0;min-height:100%;background:#0a0f18}body{min-height:100vh;overflow-x:hidden}
+body:before{content:"";position:fixed;inset:0;pointer-events:none;background:radial-gradient(circle at 15% 10%,rgba(159,134,255,.10),transparent 32%),radial-gradient(circle at 90% 20%,rgba(85,214,139,.07),transparent 26%)}
+.topbar{position:sticky;top:0;z-index:20;padding:14px 16px 12px;background:rgba(10,15,24,.90);backdrop-filter:blur(16px);border-bottom:1px solid rgba(128,150,180,.18)}
+.brandrow{display:flex;align-items:center;justify-content:space-between;gap:14px;max-width:1440px;margin:auto}.brand{display:flex;align-items:center;gap:11px}.logo{width:34px;height:34px;border:1px solid #41506a;border-radius:10px;display:grid;place-items:center;background:#111a29;box-shadow:inset 0 0 18px rgba(159,134,255,.12)}.logo:before{content:"A";font-size:15px;font-weight:900;letter-spacing:-.05em}.title{font-size:15px;font-weight:800;letter-spacing:.01em}.subtitle{font-size:11px;color:var(--muted);margin-top:2px}.host-pill{display:flex;align-items:center;gap:7px;padding:7px 10px;border:1px solid #34425b;border-radius:999px;font-size:11px;color:#c9d3e3;background:#111827}.host-dot{width:8px;height:8px;border-radius:50%;background:var(--idle);box-shadow:0 0 0 3px rgba(135,148,168,.10)}.host-pill.ON_DUTY .host-dot{background:var(--work);box-shadow:0 0 0 3px rgba(85,214,139,.12)}.host-pill.OFF_DUTY .host-dot{background:#596273}
+.dashboard{max-width:1440px;margin:0 auto;padding:16px}.summarybar{display:grid;grid-template-columns:minmax(240px,1.4fr) repeat(5,minmax(72px,.55fr));gap:8px;margin-bottom:14px}.summary-main,.metric{border:1px solid #26354c;background:rgba(17,25,39,.88);border-radius:13px;min-height:68px;padding:11px 13px}.summary-main{display:flex;flex-direction:column;justify-content:center}.summary-title{font-size:13px;font-weight:800}.summary-caption{font-size:10px;color:var(--muted);margin-top:5px}.metric{display:flex;flex-direction:column;justify-content:center;align-items:flex-start}.metric b{font-size:19px;line-height:1}.metric span{font-size:10px;color:var(--muted);margin-top:6px}.office-shell{position:relative;border:1px solid #26354c;border-radius:18px;background:#0d1420;overflow:hidden;box-shadow:0 26px 80px rgba(0,0,0,.28)}.office-shell:before{content:"";position:absolute;inset:0;opacity:.22;pointer-events:none;background-image:linear-gradient(rgba(94,115,145,.12) 1px,transparent 1px),linear-gradient(90deg,rgba(94,115,145,.12) 1px,transparent 1px);background-size:26px 26px}.office-head{position:relative;z-index:2;display:flex;align-items:center;justify-content:space-between;gap:10px;padding:12px 14px;border-bottom:1px solid #26354c;background:rgba(14,22,34,.94)}.office-head strong{font-size:12px}.office-meta{font-size:10px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.floor{position:relative;z-index:1;padding:14px;display:grid;grid-template-columns:minmax(235px,.75fr) minmax(0,2.4fr);gap:12px}.executive{min-height:280px;border:1px solid #34445f;border-radius:15px;background:linear-gradient(145deg,rgba(21,31,48,.96),rgba(13,21,33,.96));padding:13px;display:flex;flex-direction:column}.room-label{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:10px}.room-name{font-size:12px;font-weight:800}.room-state{font-size:9px;padding:4px 7px;border:1px solid #394965;border-radius:999px;color:#9fb0c9}.exec-space{flex:1;position:relative;border:1px solid rgba(83,103,133,.45);border-radius:12px;background:linear-gradient(180deg,rgba(31,43,62,.55),rgba(14,23,36,.7));overflow:hidden;min-height:220px}.window{position:absolute;left:18px;right:18px;top:18px;height:66px;border:1px solid #3b506f;border-radius:8px;background:linear-gradient(180deg,#172844,#101a2a);box-shadow:inset 0 0 28px rgba(94,147,255,.08)}.window:before,.window:after{content:"";position:absolute;background:#3b506f}.window:before{left:50%;top:0;bottom:0;width:1px}.window:after{left:0;right:0;top:50%;height:1px}.exec-desk{position:absolute;left:50%;bottom:32px;transform:translateX(-50%);width:150px;height:52px;border-radius:7px 7px 3px 3px;background:#26344a;border:1px solid #41516a;box-shadow:0 15px 18px rgba(0,0,0,.25)}.exec-desk:before{content:"";position:absolute;left:20px;right:20px;top:-34px;height:33px;border:1px solid #40516c;border-radius:6px;background:#0c121d;box-shadow:inset 0 0 20px rgba(109,168,255,.08)}.exec-chair{position:absolute;left:50%;bottom:18px;transform:translateX(-50%);width:46px;height:52px;border-radius:16px 16px 8px 8px;background:#1b2638;border:1px solid #40506a}.exec-person{position:absolute;left:50%;bottom:57px;transform:translateX(-50%);width:36px;height:62px}.exec-person:before{content:"";position:absolute;left:9px;top:0;width:18px;height:18px;border-radius:50%;background:#b7c4d7}.exec-person:after{content:"";position:absolute;left:5px;top:17px;width:26px;height:38px;border-radius:12px 12px 7px 7px;background:#667997}.exec-space.OFF_DUTY .exec-person{display:none}.exec-space.OFF_DUTY{opacity:.6}.exec-caption{position:absolute;left:12px;right:12px;bottom:7px;text-align:center;font-size:9px;color:#8fa3bf}.rooms{display:grid;grid-template-columns:repeat(2,minmax(260px,1fr));gap:12px}.room{position:relative;min-height:280px;border:1px solid #30405a;border-radius:15px;background:rgba(16,25,39,.94);padding:12px;overflow:hidden}.room:before{content:"";position:absolute;inset:38px 8px 8px;border:1px dashed rgba(96,119,153,.18);border-radius:10px;pointer-events:none}.room.RUNNING{border-color:rgba(85,214,139,.45)}.room.PROBLEM{border-color:rgba(255,107,118,.55)}.room-title{font-size:12px;font-weight:800;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:78%}.room-status{font-size:9px;padding:4px 7px;border-radius:999px;background:#182437;border:1px solid #30415d;color:#94a8c3}.room.RUNNING .room-status{color:#82e6ac;border-color:rgba(85,214,139,.35)}.workstations{position:relative;display:grid;grid-template-columns:repeat(auto-fill,minmax(154px,1fr));gap:9px;padding-top:4px}.station{min-height:194px;border:1px solid #2a3a52;border-radius:11px;background:linear-gradient(180deg,#151f30,#111a29);padding:9px;position:relative;overflow:hidden}.station:after{content:"";position:absolute;left:8px;right:8px;bottom:8px;height:1px;background:rgba(91,111,143,.25)}.worker-top{display:flex;justify-content:space-between;align-items:flex-start;gap:5px;min-height:28px}.worker-title{font-size:10px;font-weight:750;line-height:1.25;max-height:26px;overflow:hidden}.badge{flex:none;font-size:8px;font-weight:800;letter-spacing:.04em;padding:3px 5px;border-radius:999px;border:1px solid #41506a;color:#9dadc3}.station.WORKING .badge{color:#79e4a7;border-color:rgba(85,214,139,.42)}.station.PROBLEM .badge{color:#ff9099;border-color:rgba(255,107,118,.48)}.station.READY_AT_DESK .badge{color:#8ab8ff;border-color:rgba(109,168,255,.42)}.scene{height:103px;position:relative;margin-top:5px}.monitor{position:absolute;left:50%;top:11px;transform:translateX(-50%);width:52px;height:36px;border:3px solid #374861;border-radius:5px;background:#080d15;box-shadow:0 0 0 1px #111}.monitor:after{content:"";position:absolute;left:20px;bottom:-11px;width:8px;height:9px;background:#374861;box-shadow:0 8px 0 4px #27364b}.screenline{position:absolute;left:7px;right:7px;height:2px;border-radius:2px;background:#435874;box-shadow:0 6px 0 #33475f,0 12px 0 #293b52}.desk{position:absolute;left:11px;right:11px;top:55px;height:9px;border-radius:3px;background:#35445a;border:1px solid #485971}.desk:before,.desk:after{content:"";position:absolute;top:7px;width:5px;height:37px;background:#28374c}.desk:before{left:7px}.desk:after{right:7px}.person{position:absolute;left:50%;top:55px;transform:translateX(-50%);width:34px;height:58px;z-index:3}.head{position:absolute;left:9px;top:0;width:17px;height:17px;border-radius:50%;background:#c2ccda;border:1px solid #dbe2ed}.body{position:absolute;left:5px;top:16px;width:25px;height:33px;border-radius:11px 11px 6px 6px;background:#657994;border:1px solid #788ca8}.arm{position:absolute;top:21px;width:7px;height:25px;border-radius:5px;background:#8798ae;transform-origin:top}.arm.l{left:1px;transform:rotate(18deg)}.arm.r{right:1px;transform:rotate(-18deg)}.chair{position:absolute;left:50%;top:78px;transform:translateX(-50%);width:39px;height:33px;border-radius:12px 12px 5px 5px;background:#1b2739;border:1px solid #374861;z-index:1}.station.WORKING .monitor{border-color:#39875d;box-shadow:0 0 15px rgba(85,214,139,.14)}.station.WORKING .screenline{background:#55d68b;box-shadow:0 6px 0 #3d9c69,0 12px 0 #286b49}.station.WORKING .arm.l{animation:typeL .7s ease-in-out infinite alternate}.station.WORKING .arm.r{animation:typeR .68s ease-in-out infinite alternate}.station.WORKING .body{background:#477c64}.station.PROBLEM{box-shadow:inset 0 0 0 1px rgba(255,107,118,.12)}.station.PROBLEM .monitor{border-color:#a74750;animation:alarm 1.1s ease-in-out infinite}.station.PROBLEM .screenline{background:#ff6b76;box-shadow:0 6px 0 #a74750,0 12px 0 #673239}.station.PROBLEM .body{background:#8a4b55}.station.READY_AT_DESK .person{transform:translateX(-50%) translateY(5px)}.station.IDLE_AFTER_COMPLETION{opacity:.72}.station.IDLE_AFTER_COMPLETION .person{transform:translateX(-50%) translateY(8px)}.worker-info{font-size:8.5px;color:#8ea0ba;line-height:1.35;min-height:26px;overflow:hidden}.worker-info strong{font-weight:700;color:#b8c5d7}.empty-station{min-height:194px;border:1px dashed #2a3a52;border-radius:11px;display:grid;place-items:center;color:#596b84;text-align:center;font-size:9px;background:rgba(11,18,29,.45)}.empty-chair{font-size:27px;filter:grayscale(1);opacity:.55;margin-bottom:5px}.legend{display:flex;gap:12px;flex-wrap:wrap;padding:11px 14px;border-top:1px solid #26354c;background:#0e1622;font-size:9px;color:#8193ad}.legend i{width:7px;height:7px;border-radius:50%;display:inline-block;margin-right:4px}.legend .w{background:var(--work)}.legend .r{background:var(--wait)}.legend .p{background:var(--problem)}.legend .o{background:var(--idle)}.err{padding:20px;color:#ff9ca4}.offline-overlay{display:none}.office-shell.OFF_DUTY .offline-overlay{display:flex;position:absolute;z-index:9;inset:48px 0 0;align-items:center;justify-content:center;background:rgba(7,11,17,.74);backdrop-filter:grayscale(1) blur(1px);font-size:13px;font-weight:800}.office-shell.OFF_DUTY .offline-overlay small{display:block;font-size:10px;font-weight:500;color:#9aa8bd;margin-top:5px;text-align:center}
+@keyframes typeL{to{transform:rotate(32deg) translateY(2px)}}@keyframes typeR{to{transform:rotate(-31deg) translateY(2px)}}@keyframes alarm{50%{box-shadow:0 0 18px rgba(255,107,118,.35)}}
+@media(max-width:880px){.summarybar{grid-template-columns:repeat(3,1fr)}.summary-main{grid-column:1/-1}.floor{grid-template-columns:1fr}.executive{min-height:220px}.exec-space{min-height:165px}.rooms{grid-template-columns:1fr}.room{min-height:240px}}
+@media(max-width:520px){.topbar{padding:11px 12px}.dashboard{padding:10px}.brandrow{align-items:flex-start}.subtitle{display:none}.host-pill{padding:6px 8px}.summarybar{gap:6px}.summary-main,.metric{border-radius:10px;min-height:56px;padding:9px}.metric b{font-size:17px}.office-head{align-items:flex-start;flex-direction:column}.floor{padding:9px;gap:9px}.rooms{gap:9px}.room{padding:9px}.workstations{grid-template-columns:repeat(2,minmax(0,1fr));gap:7px}.station{min-height:185px;padding:7px}.worker-title{font-size:9px}.scene{height:96px}.worker-info{font-size:8px}.executive{min-height:200px}.exec-space{min-height:145px}.exec-desk{bottom:28px}.window{height:48px}.legend{gap:8px}}
+</style></head><body>
+<header class="topbar"><div class="brandrow"><div class="brand"><div class="logo"></div><div><div class="title">AIWorkspace · Virtual Office</div><div class="subtitle">업무가 실제로 움직이는 모습을 한눈에 보는 운영 사무실</div></div></div><div id="hostpill" class="host-pill"><span class="host-dot"></span><span id="hosttext">연결 확인 중</span></div></div></header>
+<div class="dashboard"><section id="summary" class="summarybar"></section><section id="officeShell" class="office-shell"><div class="office-head"><strong>OFFICE FLOOR</strong><div id="meta" class="office-meta"></div></div><div id="floor" class="floor"></div><div class="offline-overlay"><div>🏠 오늘은 퇴근했습니다<small>호스트가 다시 온라인이 되면 사무실이 자동으로 열립니다.</small></div></div><div class="legend"><span><i class="w"></i>작업중</span><span><i class="r"></i>준비/대기</span><span><i class="p"></i>문제</span><span><i class="o"></i>퇴근/비활성</span></div></section></div>
+<script id="aiworkspace-public-bridge">
+(() => {
+  "use strict";
+  const STATE_URL = "https://raw.githubusercontent.com/junportnoy37-ctrl/ai-workspace-dashboard/state/status.enc";
+  const AAD = new TextEncoder().encode("aiworkspace-dashboard-state-v1");
+  const STORAGE_KEY = "aiworkspace-dashboard-key-v1";
+  const STALE_AFTER_MS = 120000;
+  const nativeFetch = window.fetch.bind(window);
+  let token = null;
+  let stateCache = null;
+  let stateCacheAt = 0;
+  let unlockWait = null;
+
+  const b64 = value => Uint8Array.from(atob(value), c => c.charCodeAt(0));
+
+  async function importKey(value) {
+    if (!/^[A-Za-z0-9_-]{24}$/.test(value)) throw new Error("bad key");
+    const digest = await crypto.subtle.digest("SHA-256", new TextEncoder().encode(value));
+    return crypto.subtle.importKey("raw", digest, {name:"AES-GCM"}, false, ["decrypt"]);
+  }
+
+  function offlineProjection(state) {
+    const copy = JSON.parse(JSON.stringify(state));
+    copy.host = Object.assign({}, copy.host || {}, {
+      online_state:"OFFLINE", visual_state:"OFF_DUTY", abnormal_interruption:false
+    });
+    copy.aggregate = Object.assign({}, copy.aggregate || {}, {
+      total:0, in_progress:0, waiting:0, problem:0, user_attention:0
+    });
+    copy.tasks = [];
+    if (Array.isArray(copy.projects)) {
+      copy.projects = copy.projects.map(project => Object.assign({}, project, {
+        status:"OFF_DUTY", tasks:[]
+      }));
+    }
+    return copy;
+  }
+
+  function freshnessProjection(payload) {
+    const publishedAt = Date.parse(payload.published_at || "");
+    if (!Number.isFinite(publishedAt) || Date.now() - publishedAt > STALE_AFTER_MS) {
+      return offlineProjection(payload.state);
+    }
+    return payload.state;
+  }
+
+  async function encryptedState(value) {
+    const response = await nativeFetch(STATE_URL + "?v=" + Date.now(), {
+      cache:"no-store", credentials:"omit", referrerPolicy:"no-referrer"
+    });
+    if (!response.ok) throw new Error("state unavailable");
+    const envelope = await response.json();
+    if (envelope.version !== 1 || envelope.alg !== "AES-256-GCM" ||
+        envelope.aad !== "aiworkspace-dashboard-state-v1") throw new Error("bad envelope");
+    const nonce = b64(envelope.nonce), cipher = b64(envelope.ciphertext), tag = b64(envelope.tag);
+    if (nonce.length !== 12 || tag.length !== 16) throw new Error("bad envelope");
+    const combined = new Uint8Array(cipher.length + tag.length);
+    combined.set(cipher); combined.set(tag, cipher.length);
+    const key = await importKey(value);
+    const clear = await crypto.subtle.decrypt({
+      name:"AES-GCM", iv:nonce, additionalData:AAD, tagLength:128
+    }, key, combined);
+    const payload = JSON.parse(new TextDecoder().decode(clear));
+    if (!payload || payload.public_transport_schema !== 1 || !payload.state) throw new Error("bad payload");
+    return freshnessProjection(payload);
+  }
+
+  function lockButton() {
+    if (document.getElementById("aiworkspace-public-lock")) return;
+    const b = document.createElement("button");
+    b.id = "aiworkspace-public-lock"; b.type = "button"; b.textContent = "잠금";
+    Object.assign(b.style, {
+      position:"fixed",top:"12px",right:"12px",zIndex:"2147483646",
+      border:"1px solid rgba(255,255,255,.25)",borderRadius:"10px",
+      padding:"7px 11px",background:"rgba(10,14,22,.78)",color:"#fff",
+      font:"600 12px system-ui,sans-serif",backdropFilter:"blur(8px)"
+    });
+    b.onclick = () => {
+      token = null; stateCache = null; stateCacheAt = 0;
+      localStorage.removeItem(STORAGE_KEY); location.reload();
+    };
+    document.body.appendChild(b);
+  }
+
+  function unlock(message="") {
+    if (unlockWait) return unlockWait;
+    unlockWait = new Promise(resolve => {
+      const overlay = document.createElement("div");
+      overlay.id = "aiworkspace-public-unlock";
+      Object.assign(overlay.style, {
+        position:"fixed",inset:"0",zIndex:"2147483647",display:"grid",
+        placeItems:"center",padding:"24px",background:"rgba(5,8,14,.96)",
+        color:"#fff",fontFamily:"system-ui,sans-serif"
+      });
+      const form = document.createElement("form");
+      Object.assign(form.style, {
+        width:"min(92vw,420px)",padding:"24px",borderRadius:"18px",
+        border:"1px solid rgba(255,255,255,.16)",background:"#151b27",
+        boxShadow:"0 24px 80px rgba(0,0,0,.45)"
+      });
+      form.innerHTML = `
+        <div style="font-size:12px;opacity:.72;margin-bottom:7px">AIWorkspace</div>
+        <div style="font-size:21px;font-weight:750;margin-bottom:8px">Virtual Office 잠금 해제</div>
+        <div style="font-size:13px;line-height:1.5;opacity:.72;margin-bottom:18px">
+          공개 페이지에는 운영 현황이 없습니다. Dashboard Key를 가진 기기에서만 암호화 현황을 복호화합니다.
+        </div>
+        <input id="aiworkspace-public-key-input" type="password" autocomplete="off"
+          autocapitalize="none" spellcheck="false" maxlength="24" placeholder="24자 Dashboard Key"
+          style="box-sizing:border-box;width:100%;padding:12px 13px;border-radius:10px;border:1px solid rgba(255,255,255,.2);background:#0d121c;color:#fff;font:500 16px ui-monospace,monospace;outline:none">
+        <label style="display:flex;gap:8px;align-items:center;margin:12px 0 16px;font-size:13px;opacity:.82">
+          <input id="aiworkspace-public-remember" type="checkbox"> 이 기기에 키 저장
+        </label>
+        <div id="aiworkspace-public-error" style="min-height:18px;color:#ff9a9a;font-size:12px;margin-bottom:8px">${message}</div>
+        <button type="submit" style="width:100%;padding:11px 14px;border:0;border-radius:10px;font-weight:700">열기</button>`;
+      overlay.appendChild(form); document.documentElement.appendChild(overlay);
+      const input = form.querySelector("#aiworkspace-public-key-input");
+      const error = form.querySelector("#aiworkspace-public-error");
+      const remember = form.querySelector("#aiworkspace-public-remember");
+      setTimeout(() => input.focus(), 0);
+      form.onsubmit = async event => {
+        event.preventDefault();
+        const candidate = input.value.trim(); error.textContent = "";
+        try {
+          stateCache = await encryptedState(candidate); stateCacheAt = Date.now(); token = candidate;
+          if (remember.checked) localStorage.setItem(STORAGE_KEY, candidate);
+          else localStorage.removeItem(STORAGE_KEY);
+          overlay.remove(); unlockWait = null; lockButton(); resolve(candidate);
+        } catch (_) {
+          error.textContent = "키가 올바르지 않거나 최신 현황을 가져올 수 없습니다.";
+          input.select();
+        }
+      };
+    });
+    return unlockWait;
+  }
+
+  async function ensureKey() {
+    if (token) return token;
+    const saved = localStorage.getItem(STORAGE_KEY);
+    if (saved && /^[A-Za-z0-9_-]{24}$/.test(saved)) {
+      try {
+        stateCache = await encryptedState(saved); stateCacheAt = Date.now(); token = saved;
+        lockButton(); return saved;
+      } catch (_) { localStorage.removeItem(STORAGE_KEY); }
+    }
+    return unlock();
+  }
+
+  async function currentState() {
+    const value = await ensureKey();
+    if (stateCache && Date.now() - stateCacheAt < 5000) return stateCache;
+    try {
+      stateCache = await encryptedState(value); stateCacheAt = Date.now(); return stateCache;
+    } catch (e) {
+      if (stateCache) return stateCache;
+      throw e;
+    }
+  }
+
+  function isStateRequest(input) {
+    try {
+      const value = typeof input === "string" ? input : input.url;
+      return new URL(value, location.href).pathname === "/api/state";
+    } catch (_) { return false; }
+  }
+
+  window.fetch = async (input, init) => {
+    if (!isStateRequest(input)) return nativeFetch(input, init);
+    return new Response(JSON.stringify(await currentState()), {
+      status:200, headers:{"Content-Type":"application/json; charset=utf-8","Cache-Control":"no-store"}
+    });
+  };
+})();
+</script>
+<script>
+const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const labels={WORKING:'작업중',READY_AT_DESK:'대기',PROBLEM:'문제',IDLE_AFTER_COMPLETION:'완료 후 여유',USER_ATTENTION:'확인 필요'};
+function summary(d){const a=d.aggregate||{};return `<div class="summary-main"><div class="summary-title">현재 ${Number(a.in_progress||0)>0?'업무가 진행 중입니다':'사무실이 대기 중입니다'}</div><div class="summary-caption">Task 하나를 작업자 한 명으로 표시합니다.</div></div><div class="metric"><b>${a.total||0}</b><span>전체 Task</span></div><div class="metric"><b>${a.in_progress||0}</b><span>진행</span></div><div class="metric"><b>${a.waiting||0}</b><span>대기</span></div><div class="metric"><b>${a.problem||0}</b><span>문제</span></div><div class="metric"><b>${a.user_attention||0}</b><span>사용자 확인</span></div>`}
+function executive(host){const state=host?.visual_state||'OFF_DUTY';return `<aside class="executive"><div class="room-label"><span class="room-name">대표실 · 운영 관제</span><span class="room-state">${state==='ON_DUTY'?'근무중':'퇴근'}</span></div><div class="exec-space ${esc(state)}"><div class="window"></div><div class="exec-chair"></div><div class="exec-person"></div><div class="exec-desk"></div><div class="exec-caption">전체 프로젝트와 작업 흐름을 관리하는 자리</div></div></aside>`}
+function station(t){const visual=t.worker_visual_state||'READY_AT_DESK';const op=t.current_operation?`현재: ${esc(t.current_operation)}`:(t.execution_state==='IDLE_ACTIVE'?'활성 Task · 실행 대기':'실행 대기');return `<article class="station ${esc(visual)}"><div class="worker-top"><div class="worker-title">${esc(t.human_title||t.task_id)}</div><span class="badge">${esc(labels[visual]||visual)}</span></div><div class="scene"><div class="monitor"><div class="screenline"></div></div><div class="desk"></div><div class="chair"></div><div class="person"><span class="head"></span><span class="body"></span><span class="arm l"></span><span class="arm r"></span></div></div><div class="worker-info"><strong>${esc(t.execution_state||'')}</strong><br>${op}</div></article>`}
+function room(p){const status=p.status||'IDLE';const workers=Array.isArray(p.tasks)&&p.tasks.length?p.tasks.map(station).join(''):`<div class="empty-station"><div><div class="empty-chair">🪑</div>배정된 작업자 없음</div></div>`;return `<section class="room ${esc(status)}"><div class="room-label"><div class="room-title">${esc(p.title)}</div><span class="room-status">${status==='RUNNING'?'작업중':status==='WAITING'?'대기':'여유'}</span></div><div class="workstations">${workers}</div></section>`}
+async function refresh(){try{const r=await fetch('/api/state',{cache:'no-store'});const d=await r.json();if(!r.ok)throw new Error(d.error||'state unavailable');const host=d.host||{};document.getElementById('summary').innerHTML=summary(d);const pill=document.getElementById('hostpill');pill.className=`host-pill ${esc(host.visual_state||'OFF_DUTY')}`;document.getElementById('hosttext').textContent=host.visual_state==='ON_DUTY'?'Mac 근무중':'Mac 퇴근';const shell=document.getElementById('officeShell');shell.className=`office-shell ${esc(host.visual_state||'OFF_DUTY')}`;document.getElementById('meta').textContent=`generation ${d.generation??'-'} · ${d.generated_at||''}`;document.getElementById('floor').innerHTML=executive(host)+`<div class="rooms">${(d.projects||[]).map(room).join('')}</div>`}catch(e){document.getElementById('floor').innerHTML=`<div class="err">현황을 불러오지 못했습니다 · ${esc(e.message)}</div>`}}
+refresh();setInterval(refresh,3000);
+</script></body></html>
