@@ -1,0 +1,223 @@
+<!doctype html>
+<html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>AIWorkspace Virtual Office</title>
+<style>
+:root{font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;color:#eef3fb;background:#08101c;--panel:#111b2a;--panel2:#152235;--line:#263a54;--muted:#8ea4bf;--work:#53d99a;--wait:#6ca9ff;--problem:#ff6f7f;--attention:#f2c76e;--done:#73dfbf}
+*{box-sizing:border-box}html,body{margin:0;min-height:100%;background:#08101c}body{min-height:100vh;overflow-x:hidden;background:radial-gradient(circle at 12% 0%,rgba(76,119,190,.13),transparent 26rem),radial-gradient(circle at 92% 8%,rgba(57,189,150,.07),transparent 22rem),#08101c}
+.topbar{position:sticky;top:0;z-index:20;background:rgba(8,16,28,.92);backdrop-filter:blur(14px);border-bottom:1px solid rgba(119,145,180,.17)}.topin{max-width:1360px;margin:auto;padding:11px 14px;display:flex;align-items:center;justify-content:space-between;gap:10px}.brand{display:flex;align-items:center;gap:9px;min-width:0}.logo{width:31px;height:31px;border:1px solid #38506f;border-radius:9px;display:grid;place-items:center;background:#121e30;font-weight:900}.brandtxt{min-width:0}.brandtxt strong{display:block;font-size:13px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.brandtxt span{display:block;font-size:9px;color:var(--muted);margin-top:2px}.host{display:flex;align-items:center;gap:6px;border:1px solid #30445f;background:#101a29;border-radius:999px;padding:6px 9px;font-size:10px;white-space:nowrap}.dot{width:7px;height:7px;border-radius:50%;background:#6a7788}.host.ON_DUTY .dot{background:var(--work);box-shadow:0 0 0 3px rgba(83,217,154,.12)}
+.wrap{max-width:1360px;margin:auto;padding:12px 14px 24px}.summary{display:grid;grid-template-columns:minmax(220px,1.6fr) repeat(5,minmax(74px,.55fr));gap:7px;margin-bottom:10px}.sumlead,.metric{border:1px solid var(--line);background:rgba(17,27,42,.92);border-radius:12px;min-height:58px;padding:9px 11px}.sumlead{display:flex;flex-direction:column;justify-content:center}.sumlead b{font-size:12px}.sumlead span{font-size:9px;color:var(--muted);margin-top:4px}.metric b{display:block;font-size:17px}.metric span{font-size:9px;color:var(--muted)}
+.ceo{border:1px solid rgba(242,199,110,.28);background:linear-gradient(135deg,rgba(35,34,38,.96),rgba(17,27,42,.96));border-radius:14px;margin-bottom:10px;overflow:hidden}.roomhead{display:flex;align-items:center;justify-content:space-between;gap:8px;padding:9px 11px;border-bottom:1px solid rgba(119,145,180,.13)}.roomtitle{font-size:12px;font-weight:800}.roommeta{font-size:9px;color:var(--muted)}.ceobody{padding:8px}.ceoempty{display:flex;align-items:center;gap:9px;padding:8px;color:#b5c2d3;font-size:10px}.ceoicon{width:33px;height:33px;border-radius:10px;display:grid;place-items:center;background:rgba(242,199,110,.08);border:1px solid rgba(242,199,110,.18)}
+.projects{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.project{border:1px solid var(--line);background:rgba(15,25,40,.94);border-radius:14px;overflow:hidden;min-width:0}.project.RUNNING{border-color:rgba(83,217,154,.32)}.project.PROBLEM{border-color:rgba(255,111,127,.4)}.projecttop{display:flex;align-items:flex-start;justify-content:space-between;gap:8px;padding:10px 11px 8px}.pname{font-size:12px;font-weight:800}.psub{font-size:9px;color:var(--muted);margin-top:3px}.pstate{font-size:8px;padding:4px 6px;border-radius:999px;border:1px solid #324963;color:#9fb3ce;white-space:nowrap}.tasklist{padding:0 8px 8px;display:grid;gap:7px}
+.task{min-height:104px;border:1px solid #243850;border-radius:11px;background:linear-gradient(180deg,#142238,#101a2a);display:grid;grid-template-columns:96px minmax(0,1fr);gap:7px;align-items:center;padding:7px;position:relative;overflow:hidden}.task.WORKING{border-color:rgba(83,217,154,.25)}.task.PROBLEM{border-color:rgba(255,111,127,.34)}.task.USER_ATTENTION{border-color:rgba(242,199,110,.38)}.avatarbox{height:88px;position:relative;display:grid;place-items:end center}.avatarbox svg{width:80px;height:80px;filter:drop-shadow(0 7px 10px rgba(0,0,0,.25))}.bubble{position:absolute;left:51px;top:1px;z-index:3;min-width:55px;max-width:92px;padding:5px 6px;border-radius:7px 7px 7px 2px;border:1px solid #42658c;background:#173250;color:#d9edff;font-size:8px;font-weight:800;line-height:1.25;text-align:center}.WORKING .bubble{border-color:rgba(83,217,154,.52);background:#153b34;color:#a7f0d1}.PROBLEM .bubble{border-color:rgba(255,111,127,.55);background:#43232b;color:#ffc0c7}.USER_ATTENTION .bubble{border-color:rgba(242,199,110,.55);background:#41351d;color:#ffe2a0}.COMPLETED .bubble{border-color:rgba(115,223,191,.5);background:#183a32;color:#b6f5e3}.tinfo{min-width:0}.ttitle{font-size:11px;font-weight:800;line-height:1.25;margin-right:20px}.tdesc{font-size:9px;color:var(--muted);margin-top:4px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.sysstate{display:flex;align-items:center;gap:5px;margin-top:8px;font-size:9px;color:#aab9cc}.sysstate i{width:6px;height:6px;border-radius:50%;background:var(--wait)}.WORKING .sysstate i{background:var(--work)}.PROBLEM .sysstate i{background:var(--problem)}.USER_ATTENTION .sysstate i{background:var(--attention)}.COMPLETED .sysstate i{background:var(--done)}.origin{font-size:8px;color:#9fb0c7;margin-top:4px}.missing{font-size:8px;color:#f0bd6d;margin-top:4px}.empty{margin:0 8px 8px;border:1px dashed #2a3d55;border-radius:10px;min-height:72px;display:grid;place-items:center;text-align:center;color:#70849f;font-size:9px;background:rgba(7,13,23,.34)}
+.footer{margin-top:10px;padding:8px 2px;font-size:8px;color:#6f829a;text-align:right}.offline{display:none}.OFF_DUTY .offline{display:flex;position:fixed;z-index:50;inset:52px 0 0;background:rgba(5,9,15,.80);backdrop-filter:grayscale(1) blur(1px);align-items:center;justify-content:center;text-align:center;font-size:13px;font-weight:800}.offline small{display:block;margin-top:6px;color:#9aabba;font-size:10px;font-weight:500}
+@media(max-width:760px){.wrap{padding:9px 9px 20px}.topin{padding:9px}.brandtxt span{display:none}.summary{grid-template-columns:repeat(3,1fr);gap:5px}.sumlead{grid-column:1/-1;min-height:46px}.metric{min-height:48px;padding:7px 8px}.metric b{font-size:15px}.projects{grid-template-columns:1fr;gap:8px}.projecttop{padding:9px}.tasklist{padding:0 6px 6px}.task{grid-template-columns:88px minmax(0,1fr);min-height:96px;padding:5px}.avatarbox{height:82px}.avatarbox svg{width:75px;height:75px}.bubble{left:45px;top:0;font-size:7.5px}.ttitle{font-size:10.5px}.roomhead{padding:8px 9px}.ceobody{padding:6px}}
+@media(max-width:390px){.summary{grid-template-columns:repeat(2,1fr)}.sumlead{grid-column:1/-1}.task{grid-template-columns:82px minmax(0,1fr)}.avatarbox svg{width:70px;height:70px}.bubble{left:40px;max-width:80px}.host{font-size:9px}.brandtxt strong{font-size:12px}}
+</style></head><body>
+<header class="topbar"><div class="topin"><div class="brand"><div class="logo">A</div><div class="brandtxt"><strong>AIWorkspace · Virtual Office</strong><span>AI 작업자들의 현재 업무 상태</span></div></div><div id="host" class="host"><span class="dot"></span><span id="hosttxt">확인 중</span></div></div></header>
+<main class="wrap"><section id="summary" class="summary"></section><section id="ceo" class="ceo"></section><section id="projects" class="projects"></section><div id="foot" class="footer"></div></main><div class="offline"><div>🏠 오늘은 퇴근했습니다<small>실작업은 중단되어 있으며 호스트가 온라인이 되면 자동으로 다시 표시됩니다.</small></div></div>
+<script id="aiworkspace-public-bridge">
+(() => {
+  "use strict";
+  const STATE_URL = "https://raw.githubusercontent.com/junportnoy37-ctrl/ai-workspace-dashboard/state/status.enc";
+  const AAD = new TextEncoder().encode("aiworkspace-dashboard-state-v1");
+  const STORAGE_KEY = "aiworkspace-dashboard-key-v1";
+  const STALE_AFTER_MS = 120000;
+  const nativeFetch = window.fetch.bind(window);
+  let token = null;
+  let stateCache = null;
+  let stateCacheAt = 0;
+  let unlockWait = null;
+
+  const b64 = value => Uint8Array.from(atob(value), c => c.charCodeAt(0));
+
+  async function importKey(value) {
+    if (!/^[A-Za-z0-9_-]{24}$/.test(value)) throw new Error("bad key");
+    const digest = await crypto.subtle.digest("SHA-256", new TextEncoder().encode(value));
+    return crypto.subtle.importKey("raw", digest, {name:"AES-GCM"}, false, ["decrypt"]);
+  }
+
+  function transportBanner(stale, reason="") {
+    let node = document.getElementById("aiworkspace-public-transport-warning");
+    if (!stale) {
+      if (node) node.remove();
+      return;
+    }
+    if (!node) {
+      node = document.createElement("div");
+      node.id = "aiworkspace-public-transport-warning";
+      Object.assign(node.style, {
+        position:"fixed",left:"50%",bottom:"14px",transform:"translateX(-50%)",
+        zIndex:"2147483645",maxWidth:"min(92vw,560px)",boxSizing:"border-box",
+        padding:"9px 12px",borderRadius:"10px",
+        border:"1px solid rgba(242,199,110,.45)",background:"rgba(48,39,22,.94)",
+        color:"#ffe2a0",font:"600 11px system-ui,sans-serif",
+        boxShadow:"0 10px 32px rgba(0,0,0,.28)",textAlign:"center"
+      });
+      document.body.appendChild(node);
+    }
+    node.textContent = reason === "fetch_error"
+      ? "공개 현황 연결이 일시적으로 지연되고 있습니다. 마지막으로 확인된 상태를 표시합니다."
+      : "공개 현황 갱신이 지연되고 있습니다. 마지막으로 확인된 상태를 표시합니다.";
+  }
+
+  function transportProjection(state, stale, reason="") {
+    const copy = JSON.parse(JSON.stringify(state));
+    copy.host = Object.assign({}, copy.host || {}, {
+      transport_state: stale ? "STALE" : "FRESH"
+    });
+    transportBanner(stale, reason);
+    return copy;
+  }
+
+  function freshnessProjection(payload) {
+    const publishedAt = Date.parse(payload.published_at || "");
+    const age = Number.isFinite(publishedAt) ? Date.now() - publishedAt : Number.POSITIVE_INFINITY;
+    // Transport freshness is not host authority. Never infer OFFLINE/OFF_DUTY solely
+    // from a delayed public publication; preserve the last authoritative host state.
+    return transportProjection(payload.state, !Number.isFinite(age) || age > STALE_AFTER_MS, "published_at");
+  }
+
+  async function encryptedState(value) {
+    const response = await nativeFetch(STATE_URL + "?v=" + Date.now(), {
+      cache:"no-store", credentials:"omit", referrerPolicy:"no-referrer"
+    });
+    if (!response.ok) throw new Error("state unavailable");
+    const envelope = await response.json();
+    if (envelope.version !== 1 || envelope.alg !== "AES-256-GCM" ||
+        envelope.aad !== "aiworkspace-dashboard-state-v1") throw new Error("bad envelope");
+    const nonce = b64(envelope.nonce), cipher = b64(envelope.ciphertext), tag = b64(envelope.tag);
+    if (nonce.length !== 12 || tag.length !== 16) throw new Error("bad envelope");
+    const combined = new Uint8Array(cipher.length + tag.length);
+    combined.set(cipher); combined.set(tag, cipher.length);
+    const key = await importKey(value);
+    const clear = await crypto.subtle.decrypt({
+      name:"AES-GCM", iv:nonce, additionalData:AAD, tagLength:128
+    }, key, combined);
+    const payload = JSON.parse(new TextDecoder().decode(clear));
+    if (!payload || payload.public_transport_schema !== 1 || !payload.state) throw new Error("bad payload");
+    return freshnessProjection(payload);
+  }
+
+  function lockButton() {
+    if (document.getElementById("aiworkspace-public-lock")) return;
+    const b = document.createElement("button");
+    b.id = "aiworkspace-public-lock"; b.type = "button"; b.textContent = "잠금";
+    Object.assign(b.style, {
+      position:"fixed",top:"12px",right:"12px",zIndex:"2147483646",
+      border:"1px solid rgba(255,255,255,.25)",borderRadius:"10px",
+      padding:"7px 11px",background:"rgba(10,14,22,.78)",color:"#fff",
+      font:"600 12px system-ui,sans-serif",backdropFilter:"blur(8px)"
+    });
+    b.onclick = () => {
+      token = null; stateCache = null; stateCacheAt = 0;
+      localStorage.removeItem(STORAGE_KEY); location.reload();
+    };
+    document.body.appendChild(b);
+  }
+
+  function unlock(message="") {
+    if (unlockWait) return unlockWait;
+    unlockWait = new Promise(resolve => {
+      const overlay = document.createElement("div");
+      overlay.id = "aiworkspace-public-unlock";
+      Object.assign(overlay.style, {
+        position:"fixed",inset:"0",zIndex:"2147483647",display:"grid",
+        placeItems:"center",padding:"24px",background:"rgba(5,8,14,.96)",
+        color:"#fff",fontFamily:"system-ui,sans-serif"
+      });
+      const form = document.createElement("form");
+      Object.assign(form.style, {
+        width:"min(92vw,420px)",padding:"24px",borderRadius:"18px",
+        border:"1px solid rgba(255,255,255,.16)",background:"#151b27",
+        boxShadow:"0 24px 80px rgba(0,0,0,.45)"
+      });
+      form.innerHTML = `
+        <div style="font-size:12px;opacity:.72;margin-bottom:7px">AIWorkspace</div>
+        <div style="font-size:21px;font-weight:750;margin-bottom:8px">Virtual Office 잠금 해제</div>
+        <div style="font-size:13px;line-height:1.5;opacity:.72;margin-bottom:18px">
+          공개 페이지에는 운영 현황이 없습니다. Dashboard Key를 가진 기기에서만 암호화 현황을 복호화합니다.
+        </div>
+        <input id="aiworkspace-public-key-input" type="password" autocomplete="off"
+          autocapitalize="none" spellcheck="false" maxlength="24" placeholder="24자 Dashboard Key"
+          style="box-sizing:border-box;width:100%;padding:12px 13px;border-radius:10px;border:1px solid rgba(255,255,255,.2);background:#0d121c;color:#fff;font:500 16px ui-monospace,monospace;outline:none">
+        <label style="display:flex;gap:8px;align-items:center;margin:12px 0 16px;font-size:13px;opacity:.82">
+          <input id="aiworkspace-public-remember" type="checkbox"> 이 기기에 키 저장
+        </label>
+        <div id="aiworkspace-public-error" style="min-height:18px;color:#ff9a9a;font-size:12px;margin-bottom:8px">${message}</div>
+        <button type="submit" style="width:100%;padding:11px 14px;border:0;border-radius:10px;font-weight:700">열기</button>`;
+      overlay.appendChild(form); document.documentElement.appendChild(overlay);
+      const input = form.querySelector("#aiworkspace-public-key-input");
+      const error = form.querySelector("#aiworkspace-public-error");
+      const remember = form.querySelector("#aiworkspace-public-remember");
+      setTimeout(() => input.focus(), 0);
+      form.onsubmit = async event => {
+        event.preventDefault();
+        const candidate = input.value.trim(); error.textContent = "";
+        try {
+          stateCache = await encryptedState(candidate); stateCacheAt = performance.now(); token = candidate;
+          if (remember.checked) localStorage.setItem(STORAGE_KEY, candidate);
+          else localStorage.removeItem(STORAGE_KEY);
+          overlay.remove(); unlockWait = null; lockButton(); resolve(candidate);
+        } catch (_) {
+          error.textContent = "키가 올바르지 않거나 최신 현황을 가져올 수 없습니다.";
+          input.select();
+        }
+      };
+    });
+    return unlockWait;
+  }
+
+  async function ensureKey() {
+    if (token) return token;
+    const saved = localStorage.getItem(STORAGE_KEY);
+    if (saved && /^[A-Za-z0-9_-]{24}$/.test(saved)) {
+      try {
+        stateCache = await encryptedState(saved); stateCacheAt = performance.now(); token = saved;
+        lockButton(); return saved;
+      } catch (_) { localStorage.removeItem(STORAGE_KEY); }
+    }
+    return unlock();
+  }
+
+  async function currentState() {
+    const value = await ensureKey();
+    if (stateCache && performance.now() - stateCacheAt < 5000) return stateCache;
+    try {
+      stateCache = await encryptedState(value); stateCacheAt = performance.now(); return stateCache;
+    } catch (e) {
+      if (stateCache) {
+        stateCache = transportProjection(stateCache, true, "fetch_error");
+        stateCacheAt = performance.now();
+        return stateCache;
+      }
+      throw e;
+    }
+  }
+
+  function isStateRequest(input) {
+    try {
+      const value = typeof input === "string" ? input : input.url;
+      return new URL(value, location.href).pathname === "/api/state";
+    } catch (_) { return false; }
+  }
+
+  window.fetch = async (input, init) => {
+    if (!isStateRequest(input)) return nativeFetch(input, init);
+    return new Response(JSON.stringify(await currentState()), {
+      status:200, headers:{"Content-Type":"application/json; charset=utf-8","Cache-Control":"no-store"}
+    });
+  };
+})();
+</script>
+<script>
+const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const stateLabel={WORKING:'진행 중',READY_AT_DESK:'대기',PROBLEM:'문제',USER_ATTENTION:'사용자 확인',COMPLETED:'완료'};
+const bubbleText={WORKING:'작업하고 있어요',READY_AT_DESK:'대기 중이에요',PROBLEM:'문제가 생겼어요',USER_ATTENTION:'확인이 필요해요',COMPLETED:'완료했어요!'};
+function workerArt(s){const problem=s==='PROBLEM',done=s==='COMPLETED',att=s==='USER_ATTENTION',work=s==='WORKING';const mouth=problem?'M42 43q6 6 12 0':done?'M42 42q6 8 12 0':'M44 44h8';const eye=problem?'#80bfff':work?'#69e0c1':att?'#ffd57e':'#76b7ff';const armL=att?'M32 68l-12-22':problem?'M32 66L21 42':done?'M31 65L18 51':'M32 67L24 74';const armR=problem?'M61 66L72 42':done?'M61 65L74 52':'M61 67L69 74';return `<svg viewBox="0 0 96 96" aria-hidden="true"><path d="M28 36q0-25 20-25t20 25l-5 3H32z" fill="#142a49"/><path d="M28 33q6-24 23-20l13 9-4 13-12-10-14 12z" fill="#214b76"/><circle cx="48" cy="39" r="18" fill="#f0c9ad"/><path d="M32 38q2-10 8-15l1 8 21-10q4 7 2 17l-6-5-11 3-10-4z" fill="#173656"/><circle cx="41" cy="40" r="2.4" fill="${eye}"/><circle cx="55" cy="40" r="2.4" fill="${eye}"/><path d="${mouth}" stroke="#6d3d43" stroke-width="2" fill="none" stroke-linecap="round"/><path d="M31 58q17-10 34 0l5 29H26z" fill="#203c5f" stroke="#365b82"/><path d="M42 56h12l-2 14-4 4-4-4z" fill="#d9e8f4"/><path d="${armL}" stroke="#315677" stroke-width="8" stroke-linecap="round"/><path d="${armR}" stroke="#315677" stroke-width="8" stroke-linecap="round"/>${work?'<path d="M20 78h56" stroke="#55d9a0" stroke-width="3" stroke-dasharray="5 4"/>':''}${problem?'<path d="M20 28l-6-7m63 7 6-7" stroke="#ff7a87" stroke-width="3"/>':''}${done?'<path d="M74 22l3 6 6 2-6 3-3 6-3-6-6-3 6-2z" fill="#75dfc0"/>':''}${att?'<path d="M18 40l-5-8m7 3 2-9" stroke="#f2c76e" stroke-width="3"/>':''}</svg>`}
+function summary(d){const a=d.aggregate||{};return `<div class="sumlead"><b>${a.user_attention?`CEO 확인 요청 ${a.user_attention}건이 있습니다`:a.in_progress?'현재 업무가 진행 중입니다':'현재 사무실이 대기 중입니다'}</b><span>Task 하나를 작업자 한 명으로 표시합니다.</span></div><div class="metric"><b>${a.total||0}</b><span>전체 Task</span></div><div class="metric"><b>${a.in_progress||0}</b><span>진행</span></div><div class="metric"><b>${a.waiting||0}</b><span>대기</span></div><div class="metric"><b>${a.problem||0}</b><span>문제</span></div><div class="metric"><b>${a.user_attention||0}</b><span>사용자 확인</span></div>`}
+function taskCard(t,ceo=false){const s=t.worker_visual_state||'READY_AT_DESK';const op=t.current_operation?`현재 실행: ${t.current_operation}`:(s==='READY_AT_DESK'?'실행 대기 중':stateLabel[s]||'');return `<article class="task ${esc(s)}"><div class="avatarbox">${workerArt(s)}<div class="bubble">${esc(t.speech||bubbleText[s]||'상태 확인 중')}</div></div><div class="tinfo"><div class="ttitle">${esc(t.human_title||'한글 제목 미지정 작업')}</div><div class="tdesc">${esc(t.description||op)}</div><div class="sysstate"><i></i>${esc(t.status_label||stateLabel[s]||s)}</div>${ceo?`<div class="origin">원래 소속 · ${esc(t.origin_project_title||t.project_title||t.project)}</div>`:''}${t.title_missing?'<div class="missing">표시 제목 보강 필요</div>':''}</div></article>`}
+function ceoRoom(d){const q=d.ceo_queue||[];return `<div class="roomhead"><div><div class="roomtitle">CEO 방 · 확인 요청</div><div class="roommeta">사용자의 판단 없이는 진행할 수 없는 Task만 이곳으로 옵니다.</div></div><span class="pstate">${q.length?`확인 ${q.length}건`:'대기'}</span></div><div class="ceobody">${q.length?q.map(t=>taskCard(t,true)).join(''):'<div class="ceoempty"><div class="ceoicon">✓</div><div><b>확인할 작업이 없습니다</b><div class="roommeta" style="margin-top:3px">자동으로 처리 가능한 문제는 각 프로젝트 방에서 계속 해결합니다.</div></div></div>'}</div>`}
+function projectCard(p){const rows=(p.tasks||[]).map(t=>taskCard(t)).join('');return `<section class="project ${esc(p.status||'IDLE')}"><div class="projecttop"><div><div class="pname">${esc(p.title)}</div><div class="psub">${esc(p.subtitle||`${(p.tasks||[]).length}명의 작업자`)}</div></div><span class="pstate">${p.status==='RUNNING'?'작업중':p.status==='PROBLEM'?'문제':'대기'}</span></div>${rows?`<div class="tasklist">${rows}</div>`:'<div class="empty">현재 배정된 작업자가 없습니다.</div>'}</section>`}
+async function refresh(){try{const r=await fetch('/api/state',{cache:'no-store'});const d=await r.json();if(!r.ok)throw new Error(d.error||'state unavailable');document.getElementById('summary').innerHTML=summary(d);document.getElementById('ceo').innerHTML=ceoRoom(d);document.getElementById('projects').innerHTML=(d.projects||[]).map(projectCard).join('');const h=d.host||{},host=document.getElementById('host');host.className=`host ${esc(h.visual_state||'OFF_DUTY')}`;document.getElementById('hosttxt').textContent=h.visual_state==='ON_DUTY'?'Mac 근무중':'Mac 퇴근';document.body.classList.toggle('OFF_DUTY',h.visual_state!=='ON_DUTY');document.getElementById('foot').textContent=`generation ${d.generation??'-'} · ${d.generated_at||''}`}catch(e){document.getElementById('projects').innerHTML=`<div class="project"><div class="projecttop"><div class="pname">현황을 불러오지 못했습니다</div></div><div class="empty">${esc(e.message)}</div></div>`}}
+refresh();setInterval(refresh,3000);
+</script></body></html>
